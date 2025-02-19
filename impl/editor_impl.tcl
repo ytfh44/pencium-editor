@@ -5,6 +5,60 @@ namespace eval Editor {
     variable current_tab 0
     variable tabs_info {}
     
+    proc show_welcome {} {
+        variable current_tab
+        variable tabs_info
+        
+        set f [frame .paned.right.notebook.f$current_tab]
+        text $f.text -wrap none -undo 1 -font {Monospace 10} \
+            -yscrollcommand "$f.scrolly set" \
+            -xscrollcommand "$f.scrollx set"
+        scrollbar $f.scrolly -orient vertical -command "$f.text yview"
+        scrollbar $f.scrollx -orient horizontal -command "$f.text xview"
+        
+        grid $f.text -row 0 -column 0 -sticky nsew
+        grid $f.scrolly -row 0 -column 1 -sticky ns
+        grid $f.scrollx -row 1 -column 0 -sticky ew
+        grid rowconfigure $f 0 -weight 1
+        grid columnconfigure $f 0 -weight 1
+        
+        # 设置欢迎文本
+        set welcome_text "欢迎使用 Pencium Editor！
+
+这是一个基于 TCL/Tk 开发的现代化文本编辑器。
+
+快捷键：
+• Ctrl+N  - 新建文件
+• Ctrl+O  - 打开文件
+• Ctrl+S  - 保存文件
+• Ctrl+W  - 关闭当前标签页
+
+功能：
+• 多标签页编辑
+• 文件树浏览
+• 集成终端
+• 自动保存提示
+
+开始使用：
+• 使用文件树浏览文件
+• 使用快捷键新建或打开文件
+• 切换终端显示开始命令行操作
+
+项目地址：https://github.com/ytfh44/pencium-editor"
+        
+        $f.text insert 1.0 $welcome_text
+        $f.text configure -state disabled
+        
+        .paned.right.notebook add $f -text "欢迎"
+        
+        lappend tabs_info [list $current_tab "" 0]
+        
+        after idle [list .paned.right.notebook select $f]
+        after idle [list focus $f.text]
+        
+        incr current_tab
+    }
+    
     proc new_tab {} {
         variable current_tab
         variable tabs_info

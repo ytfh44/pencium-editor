@@ -229,5 +229,24 @@ bind . <Control-w> {
     }
 }
 
-# 初始化编辑器
-Editor::new_tab 
+# 处理命令行参数
+if {$argc > 0} {
+    set target [lindex $argv 0]
+    if {[file exists $target]} {
+        if {[file isdirectory $target]} {
+            # 如果是目录，设置为当前目录并刷新文件树
+            set ::TreeView::current_dir [file normalize $target]
+            TreeView::refresh .paned.left.tree
+            Editor::show_welcome
+        } else {
+            # 如果是文件，打开它
+            Editor::open_file [file normalize $target]
+        }
+    } else {
+        tk_messageBox -icon error -message "文件或目录不存在: $target"
+        Editor::show_welcome
+    }
+} else {
+    # 无参数时显示欢迎界面
+    Editor::show_welcome
+} 
