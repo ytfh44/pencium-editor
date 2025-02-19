@@ -57,7 +57,7 @@
 1. 确保系统已安装 TCL/Tk 8.6+
 2. 克隆仓库：
 ```bash
-git clone [仓库地址]
+git clone https://github.com/ytfh44/pencium-editor.git
 ```
 3. 添加执行权限：
 ```bash
@@ -119,4 +119,6 @@ wish main.tcl
 
 ## 许可证
 
-本项目采用 MIT 许可证 
+本项目采用 BSD 0-Clause License（BSD-0-Clause）。这是一个极其宽松的许可证，允许任何人自由使用、修改和分发本软件，无需保留版权声明。
+
+完整许可证文本请参见 [LICENSE](LICENSE) 文件。 
