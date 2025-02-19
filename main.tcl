@@ -247,6 +247,6 @@ if {$argc > 0} {
         Editor::show_welcome
     }
 } else {
-    # 无参数时显示欢迎界面
+    # 无参数时显示欢迎界面，不显示文件树内容
     Editor::show_welcome
 } 

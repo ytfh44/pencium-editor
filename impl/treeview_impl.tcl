@@ -8,10 +8,14 @@ namespace eval TreeView {
         variable current_dir
         $tree_widget configure -yscrollcommand "$scroll_widget set"
         $scroll_widget configure -command "$tree_widget yview"
-        refresh $tree_widget $current_dir
+        # 初始化时不显示任何文件列表
+        $tree_widget delete [$tree_widget children {}]
     }
     
     proc populate {tree_widget parent dir} {
+        # 确保目录存在且可访问
+        if {![file exists $dir] || ![file isdirectory $dir]} return
+        
         foreach item [lsort [glob -nocomplain -directory $dir -tails *]] {
             set fullpath [file join $dir $item]
             set id [$tree_widget insert $parent end -text $item]
@@ -53,7 +57,10 @@ namespace eval TreeView {
             set path $current_dir
         }
         $tree_widget delete [$tree_widget children {}]
-        populate $tree_widget "" $path
+        # 只在路径存在且为目录时填充文件树
+        if {[file exists $path] && [file isdirectory $path]} {
+            populate $tree_widget "" $path
+        }
     }
     
     proc on_select {tree_widget callback} {
