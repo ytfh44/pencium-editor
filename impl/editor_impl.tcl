@@ -128,7 +128,7 @@ namespace eval Editor {
         .paned.right.notebook forget $current
         
         if {[llength [.paned.right.notebook tabs]] == 0} {
-            after idle new_tab
+            after idle Editor::new_tab
         }
     }
     
