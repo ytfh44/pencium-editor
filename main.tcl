@@ -31,7 +31,7 @@ wm protocol . WM_DELETE_WINDOW {
     
     if {$has_unsaved} {
         set answer [tk_messageBox -icon question -title [mc "Unsaved Changes"] \
-            -message [mc "There are unsaved changes.\n\n[Yes] Save all changes\n[No] Discard changes\n[Cancel] Don't close"] \
+            -message [mc "There are unsaved changes.\n\nYes: Save all changes\nNo: Discard changes\nCancel: Don't close"] \
             -type yesnocancel]
         
         switch -- $answer {

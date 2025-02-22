@@ -84,7 +84,7 @@ namespace eval Editor {
             
             if {[is_modified $tab_id]} {
                 set title [mc "Unsaved Changes"]
-                set message [format [mc "File %s has unsaved changes.\n\n[Yes] Save changes\n[No] Discard changes\n[Cancel] Don't close"] \
+                set message [format [mc "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close"] \
                     [expr {$filename eq "" ? "[mc Untitled]-$tab_id" : [file tail $filename]}]]
                 set answer [tk_messageBox -icon question -message $message -title $title -type yesnocancel]
                 

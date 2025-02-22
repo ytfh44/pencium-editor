@@ -24,10 +24,10 @@ mcset zh_CN "Toggle Terminal" "切换终端"
 
 # 对话框
 mcset zh_CN "Unsaved Changes" "未保存的更改"
-mcset zh_CN "There are unsaved changes.\n\n[Yes] Save all changes\n[No] Discard changes\n[Cancel] Don't close" "有未保存的更改。\n\n【是】保存所有更改\n【否】放弃更改\n【取消】不关闭"
+mcset zh_CN "There are unsaved changes.\n\nYes: Save all changes\nNo: Discard changes\nCancel: Don't close" "有未保存的更改。\n\n是：保存所有更改\n否：放弃更改\n取消：不关闭"
 mcset zh_CN "Cannot open file" "无法打开文件"
 mcset zh_CN "Save failed" "保存失败"
-mcset zh_CN "File %s has unsaved changes.\n\n[Yes] Save changes\n[No] Discard changes\n[Cancel] Don't close" "文件 %s 有未保存的更改。\n\n【是】保存更改\n【否】不保存更改\n【取消】不关闭"
+mcset zh_CN "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close" "文件 %s 有未保存的更改。\n\n是：保存更改\n否：不保存更改\n取消：不关闭"
 
 # 标签页
 mcset zh_CN "Welcome" "欢迎"

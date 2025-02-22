@@ -24,10 +24,10 @@ mcset en_US "Toggle Terminal" "Toggle Terminal"
 
 # Dialogs
 mcset en_US "Unsaved Changes" "Unsaved Changes"
-mcset en_US "There are unsaved changes.\n\n[Yes] Save all changes\n[No] Discard changes\n[Cancel] Don't close" "There are unsaved changes.\n\n[Yes] Save all changes\n[No] Discard changes\n[Cancel] Don't close"
+mcset en_US "There are unsaved changes.\n\nYes: Save all changes\nNo: Discard changes\nCancel: Don't close" "There are unsaved changes.\n\nYes: Save all changes\nNo: Discard changes\nCancel: Don't close"
 mcset en_US "Cannot open file" "Cannot open file"
 mcset en_US "Save failed" "Save failed"
-mcset en_US "File %s has unsaved changes.\n\n[Yes] Save changes\n[No] Discard changes\n[Cancel] Don't close" "File %s has unsaved changes.\n\n[Yes] Save changes\n[No] Discard changes\n[Cancel] Don't close"
+mcset en_US "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close" "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close"
 
 # Tabs
 mcset en_US "Welcome" "Welcome"
