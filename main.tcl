@@ -5,6 +5,10 @@ package require msgcat
 
 # 设置语言环境
 namespace import ::msgcat::mc
+
+# 初始化语言设置
+set current_locale "zh_CN"  ;# 默认使用中文
+::msgcat::mclocale $current_locale
 ::msgcat::mcload [file join [file dirname [info script]] "locale"]
 
 # 加载模块
@@ -136,18 +140,21 @@ menu .menubar.view -tearoff 0
 menu .menubar.lang -tearoff 0
 .menubar add cascade -label [mc "Language"] -menu .menubar.lang
 .menubar.lang add radiobutton -label "English" -value "en_US" \
-    -variable ::msgcat::mclocale -command {
-        ::msgcat::mclocale en_US
+    -variable current_locale -command {
+        ::msgcat::mclocale $current_locale
         update_ui
     }
 .menubar.lang add radiobutton -label "简体中文" -value "zh_CN" \
-    -variable ::msgcat::mclocale -command {
-        ::msgcat::mclocale zh_CN
+    -variable current_locale -command {
+        ::msgcat::mclocale $current_locale
         update_ui
     }
 
 # 更新UI文本的过程
 proc update_ui {} {
+    # 更新窗口标题
+    wm title . "Pencium Editor"
+    
     # 更新菜单标签
     .menubar entryconfigure [.menubar index "File"] -label [mc "File"]
     .menubar entryconfigure [.menubar index "Edit"] -label [mc "Edit"]
@@ -172,15 +179,26 @@ proc update_ui {} {
     .menubar.view entryconfigure [.menubar.view index "Toggle File Tree"] -label [mc "Toggle File Tree"]
     .menubar.view entryconfigure [.menubar.view index "Toggle Terminal"] -label [mc "Toggle Terminal"]
     
+    # 更新标签页右键菜单
+    .tabmenu entryconfigure [.tabmenu index "Close"] -label [mc "Close"]
+    
     # 更新标签页标题
     foreach tab [.paned.right.notebook tabs] {
         set title [.paned.right.notebook tab $tab -text]
-        if {$title eq "欢迎"} {
+        if {$title eq "欢迎" || $title eq "Welcome"} {
             .paned.right.notebook tab $tab -text [mc "Welcome"]
-        } elseif {[string match "未命名-*" $title]} {
-            set num [string range $title 4 end]
+        } elseif {[string match "未命名-*" $title] || [string match "Untitled-*" $title]} {
+            set num [string range $title [expr {[string first "-" $title] + 1}] end]
             .paned.right.notebook tab $tab -text "[mc Untitled]-$num"
         }
+    }
+    
+    # 更新终端提示符
+    # 获取终端文本中最后一行
+    set last_line [.paned.right.terminal.text get "end-1c linestart" "end-1c"]
+    if {[string match "$ *" $last_line] || [string match [mc "Terminal prompt"]*]} {
+        .paned.right.terminal.text delete "end-1c linestart" "end-1c"
+        .paned.right.terminal.text insert "end-1c" [mc "Terminal prompt"]
     }
 }
 
