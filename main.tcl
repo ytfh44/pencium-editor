@@ -1,6 +1,11 @@
 #!/usr/bin/wish
 
 package require Tk
+package require msgcat
+
+# 设置语言环境
+namespace import ::msgcat::mc
+::msgcat::mcload [file join [file dirname [info script]] "locale"]
 
 # 加载模块
 source [file join [file dirname [info script]] "impl/treeview_impl.tcl"]
@@ -25,8 +30,8 @@ wm protocol . WM_DELETE_WINDOW {
     }
     
     if {$has_unsaved} {
-        set answer [tk_messageBox -icon question -title "未保存的更改" \
-            -message "有未保存的更改。\n\n【是】保存所有更改\n【否】放弃更改\n【取消】不关闭" \
+        set answer [tk_messageBox -icon question -title [mc "Unsaved Changes"] \
+            -message [mc "There are unsaved changes.\n\n[Yes] Save all changes\n[No] Discard changes\n[Cancel] Don't close"] \
             -type yesnocancel]
         
         switch -- $answer {
@@ -79,51 +84,103 @@ menu .menubar
 
 # 文件菜单
 menu .menubar.file -tearoff 0
-.menubar add cascade -label "文件" -menu .menubar.file
-.menubar.file add command -label "新建文件" -command {Editor::new_tab}
-.menubar.file add command -label "打开文件" -command {Editor::open_file}
-.menubar.file add command -label "保存" -command {Editor::save_file}
-.menubar.file add command -label "另存为" -command {Editor::save_as}
+.menubar add cascade -label [mc "File"] -menu .menubar.file
+.menubar.file add command -label [mc "New File"] -command {Editor::new_tab}
+.menubar.file add command -label [mc "Open File"] -command {Editor::open_file}
+.menubar.file add command -label [mc "Save"] -command {Editor::save_file}
+.menubar.file add command -label [mc "Save As"] -command {Editor::save_as}
 .menubar.file add separator
-.menubar.file add command -label "退出" -command exit
+.menubar.file add command -label [mc "Exit"] -command exit
 
 # 编辑菜单
 menu .menubar.edit -tearoff 0
-.menubar add cascade -label "编辑" -menu .menubar.edit
-.menubar.edit add command -label "撤销" -command {
+.menubar add cascade -label [mc "Edit"] -menu .menubar.edit
+.menubar.edit add command -label [mc "Undo"] -command {
     event generate .paned.right.notebook.f[Editor::get_current_tab].text <<Undo>>
 }
-.menubar.edit add command -label "重做" -command {
+.menubar.edit add command -label [mc "Redo"] -command {
     event generate .paned.right.notebook.f[Editor::get_current_tab].text <<Redo>>
 }
 .menubar.edit add separator
-.menubar.edit add command -label "剪切" -command {
+.menubar.edit add command -label [mc "Cut"] -command {
     event generate .paned.right.notebook.f[Editor::get_current_tab].text <<Cut>>
 }
-.menubar.edit add command -label "复制" -command {
+.menubar.edit add command -label [mc "Copy"] -command {
     event generate .paned.right.notebook.f[Editor::get_current_tab].text <<Copy>>
 }
-.menubar.edit add command -label "粘贴" -command {
+.menubar.edit add command -label [mc "Paste"] -command {
     event generate .paned.right.notebook.f[Editor::get_current_tab].text <<Paste>>
 }
 
 # 视图菜单
 menu .menubar.view -tearoff 0
-.menubar add cascade -label "视图" -menu .menubar.view
-.menubar.view add command -label "切换文件树" -command {
+.menubar add cascade -label [mc "View"] -menu .menubar.view
+.menubar.view add command -label [mc "Toggle File Tree"] -command {
     if {[winfo ismapped .paned.left]} {
         .paned forget .paned.left
     } else {
         .paned add .paned.left -before .paned.right
     }
 }
-.menubar.view add command -label "切换终端" -command {
+.menubar.view add command -label [mc "Toggle Terminal"] -command {
     if {[winfo ismapped .paned.right.terminal]} {
         grid remove .paned.right.terminal
         grid rowconfigure .paned.right 1 -minsize 0
     } else {
         grid .paned.right.terminal -row 1 -column 0 -sticky nsew
         grid rowconfigure .paned.right 1 -minsize 200
+    }
+}
+
+# 语言菜单
+menu .menubar.lang -tearoff 0
+.menubar add cascade -label [mc "Language"] -menu .menubar.lang
+.menubar.lang add radiobutton -label "English" -value "en_US" \
+    -variable ::msgcat::mclocale -command {
+        ::msgcat::mclocale en_US
+        update_ui
+    }
+.menubar.lang add radiobutton -label "简体中文" -value "zh_CN" \
+    -variable ::msgcat::mclocale -command {
+        ::msgcat::mclocale zh_CN
+        update_ui
+    }
+
+# 更新UI文本的过程
+proc update_ui {} {
+    # 更新菜单标签
+    .menubar entryconfigure [.menubar index "File"] -label [mc "File"]
+    .menubar entryconfigure [.menubar index "Edit"] -label [mc "Edit"]
+    .menubar entryconfigure [.menubar index "View"] -label [mc "View"]
+    .menubar entryconfigure [.menubar index "Language"] -label [mc "Language"]
+    
+    # 更新文件菜单
+    .menubar.file entryconfigure [.menubar.file index "New File"] -label [mc "New File"]
+    .menubar.file entryconfigure [.menubar.file index "Open File"] -label [mc "Open File"]
+    .menubar.file entryconfigure [.menubar.file index "Save"] -label [mc "Save"]
+    .menubar.file entryconfigure [.menubar.file index "Save As"] -label [mc "Save As"]
+    .menubar.file entryconfigure [.menubar.file index "Exit"] -label [mc "Exit"]
+    
+    # 更新编辑菜单
+    .menubar.edit entryconfigure [.menubar.edit index "Undo"] -label [mc "Undo"]
+    .menubar.edit entryconfigure [.menubar.edit index "Redo"] -label [mc "Redo"]
+    .menubar.edit entryconfigure [.menubar.edit index "Cut"] -label [mc "Cut"]
+    .menubar.edit entryconfigure [.menubar.edit index "Copy"] -label [mc "Copy"]
+    .menubar.edit entryconfigure [.menubar.edit index "Paste"] -label [mc "Paste"]
+    
+    # 更新视图菜单
+    .menubar.view entryconfigure [.menubar.view index "Toggle File Tree"] -label [mc "Toggle File Tree"]
+    .menubar.view entryconfigure [.menubar.view index "Toggle Terminal"] -label [mc "Toggle Terminal"]
+    
+    # 更新标签页标题
+    foreach tab [.paned.right.notebook tabs] {
+        set title [.paned.right.notebook tab $tab -text]
+        if {$title eq "欢迎"} {
+            .paned.right.notebook tab $tab -text [mc "Welcome"]
+        } elseif {[string match "未命名-*" $title]} {
+            set num [string range $title 4 end]
+            .paned.right.notebook tab $tab -text "[mc Untitled]-$num"
+        }
     }
 }
 
@@ -150,7 +207,7 @@ pack .paned.right.notebook -fill both -expand 1
 
 # 创建标签页右键菜单
 menu .tabmenu -tearoff 0
-.tabmenu add command -label "关闭" -command {
+.tabmenu add command -label [mc "Close"] -command {
     set current [.paned.right.notebook select]
     if {$current ne ""} {
         Editor::close_tab [string range $current end end]
@@ -195,14 +252,14 @@ bind TNotebook <Button-1> {
 }
 
 # 设置终端命令提示符
-.paned.right.terminal.text insert end "$ "
+.paned.right.terminal.text insert end [mc "Terminal prompt"]
 .paned.right.terminal.text mark set insert end
 
 # 绑定终端回车事件
 bind .paned.right.terminal.text <Return> {
     set cmd [string trim [.paned.right.terminal.text get "insert linestart" "insert"]]
-    if {[string match "$ *" $cmd]} {
-        set cmd [string range $cmd 2 end]
+    if {[string match [mc "Terminal prompt"]* $cmd]} {
+        set cmd [string range $cmd [string length [mc "Terminal prompt"]] end]
         if {$cmd ne ""} {
             if {[catch {
                 set result [exec {*}[split $cmd] 2>@1]
@@ -212,7 +269,7 @@ bind .paned.right.terminal.text <Return> {
             }
         }
     }
-    .paned.right.terminal.text insert end "\n$ "
+    .paned.right.terminal.text insert end "\n[mc {Terminal prompt}]"
     .paned.right.terminal.text see end
     break
 }

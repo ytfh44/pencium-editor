@@ -1,4 +1,5 @@
 source [file join [file dirname [info script]] "../interfaces/editor.tcl"]
+namespace import ::msgcat::mc
 
 namespace eval Editor {
     # 实现编辑器接口
@@ -23,33 +24,12 @@ namespace eval Editor {
         grid columnconfigure $f 0 -weight 1
         
         # 设置欢迎文本
-        set welcome_text "欢迎使用 Pencium Editor！
-
-这是一个基于 TCL/Tk 开发的现代化文本编辑器。
-
-快捷键：
-• Ctrl+N  - 新建文件
-• Ctrl+O  - 打开文件
-• Ctrl+S  - 保存文件
-• Ctrl+W  - 关闭当前标签页
-
-功能：
-• 多标签页编辑
-• 文件树浏览
-• 集成终端
-• 自动保存提示
-
-开始使用：
-• 使用文件树浏览文件
-• 使用快捷键新建或打开文件
-• 切换终端显示开始命令行操作
-
-项目地址：https://github.com/ytfh44/pencium-editor"
+        set welcome_text [mc "Welcome Text"]
         
         $f.text insert 1.0 $welcome_text
         $f.text configure -state disabled
         
-        .paned.right.notebook add $f -text "欢迎"
+        .paned.right.notebook add $f -text [mc "Welcome"]
         
         lappend tabs_info [list $current_tab "" 0]
         
@@ -79,11 +59,10 @@ namespace eval Editor {
         # 启用修改跟踪
         $f.text edit modified 0
         
-        .paned.right.notebook add $f -text "未命名-$current_tab"
+        .paned.right.notebook add $f -text "[mc Untitled]-$current_tab"
         
         lappend tabs_info [list $current_tab "" 0]
         
-        # 使用 after idle 确保标签页已完全创建后再选择
         after idle [list .paned.right.notebook select $f]
         after idle [list focus $f.text]
         
@@ -104,8 +83,9 @@ namespace eval Editor {
             set filename [lindex $fileinfo 1]
             
             if {[is_modified $tab_id]} {
-                set title "未保存的更改"
-                set message "文件 [expr {$filename eq "" ? "未命名-$tab_id" : [file tail $filename]}] 有未保存的更改。\n\n【是】保存更改\n【否】不保存更改\n【取消】不关闭"
+                set title [mc "Unsaved Changes"]
+                set message [format [mc "File %s has unsaved changes.\n\n[Yes] Save changes\n[No] Discard changes\n[Cancel] Don't close"] \
+                    [expr {$filename eq "" ? "[mc Untitled]-$tab_id" : [file tail $filename]}]]
                 set answer [tk_messageBox -icon question -message $message -title $title -type yesnocancel]
                 
                 switch -- $answer {
@@ -166,7 +146,7 @@ namespace eval Editor {
             set content [read $fh]
             close $fh
         } err]} {
-            tk_messageBox -icon error -message "无法打开文件: $err"
+            tk_messageBox -icon error -message "[mc {Cannot open file}]: $err"
             return ""
         }
         
@@ -200,7 +180,7 @@ namespace eval Editor {
             puts -nonewline $fh [get_text $tab_id]
             close $fh
         } err]} {
-            tk_messageBox -icon error -message "保存失败: $err"
+            tk_messageBox -icon error -message "[mc {Save failed}]: $err"
             return 0
         }
         
