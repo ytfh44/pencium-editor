@@ -196,9 +196,10 @@ proc update_ui {} {
     # 更新终端提示符
     # 获取终端文本中最后一行
     set last_line [.paned.right.terminal.text get "end-1c linestart" "end-1c"]
-    if {[string match "$ *" $last_line] || [string match [mc "Terminal prompt"]*]} {
+    set prompt [mc "Terminal prompt"]
+    if {[string match "$ *" $last_line] || [string match "$prompt*" $last_line]} {
         .paned.right.terminal.text delete "end-1c linestart" "end-1c"
-        .paned.right.terminal.text insert "end-1c" [mc "Terminal prompt"]
+        .paned.right.terminal.text insert "end-1c" $prompt
     }
 }
 
