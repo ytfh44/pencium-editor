@@ -4,12 +4,25 @@ package require Tk
 package require msgcat
 
 # 设置语言环境
-namespace import ::msgcat::mc
+namespace eval ::I18N {
+    variable current_locale "zh_CN"  ;# 默认使用中文
+    
+    proc init {} {
+        variable current_locale
+        ::msgcat::mclocale $current_locale
+        ::msgcat::mcload [file join [file dirname [info script]] "locale"]
+    }
+    
+    proc switch_locale {locale} {
+        variable current_locale
+        set current_locale $locale
+        ::msgcat::mclocale $locale
+        ::msgcat::mcload [file join [file dirname [info script]] "locale"]
+    }
+}
 
-# 初始化语言设置
-set current_locale "zh_CN"  ;# 默认使用中文
-::msgcat::mclocale $current_locale
-::msgcat::mcload [file join [file dirname [info script]] "locale"]
+namespace import ::msgcat::mc
+::I18N::init
 
 # 加载模块
 source [file join [file dirname [info script]] "impl/treeview_impl.tcl"]
@@ -140,47 +153,72 @@ menu .menubar.view -tearoff 0
 menu .menubar.lang -tearoff 0
 .menubar add cascade -label [mc "Language"] -menu .menubar.lang
 .menubar.lang add radiobutton -label "English" -value "en_US" \
-    -variable current_locale -command {
-        ::msgcat::mclocale $current_locale
+    -variable ::I18N::current_locale -command {
+        ::I18N::switch_locale $::I18N::current_locale
         update_ui
     }
 .menubar.lang add radiobutton -label "简体中文" -value "zh_CN" \
-    -variable current_locale -command {
-        ::msgcat::mclocale $current_locale
+    -variable ::I18N::current_locale -command {
+        ::I18N::switch_locale $::I18N::current_locale
         update_ui
     }
 
 # 更新UI文本的过程
 proc update_ui {} {
+    # 保存当前菜单索引
+    set file_idx [.menubar index "File"]
+    set edit_idx [.menubar index "Edit"]
+    set view_idx [.menubar index "View"]
+    set lang_idx [.menubar index "Language"]
+    
     # 更新窗口标题
     wm title . "Pencium Editor"
     
     # 更新菜单标签
-    .menubar entryconfigure [.menubar index "File"] -label [mc "File"]
-    .menubar entryconfigure [.menubar index "Edit"] -label [mc "Edit"]
-    .menubar entryconfigure [.menubar index "View"] -label [mc "View"]
-    .menubar entryconfigure [.menubar index "Language"] -label [mc "Language"]
+    .menubar entryconfigure $file_idx -label [mc "File"]
+    .menubar entryconfigure $edit_idx -label [mc "Edit"]
+    .menubar entryconfigure $view_idx -label [mc "View"]
+    .menubar entryconfigure $lang_idx -label [mc "Language"]
+    
+    # 保存文件菜单索引
+    set new_file_idx [.menubar.file index "New File"]
+    set open_file_idx [.menubar.file index "Open File"]
+    set save_idx [.menubar.file index "Save"]
+    set save_as_idx [.menubar.file index "Save As"]
+    set exit_idx [.menubar.file index "Exit"]
     
     # 更新文件菜单
-    .menubar.file entryconfigure [.menubar.file index "New File"] -label [mc "New File"]
-    .menubar.file entryconfigure [.menubar.file index "Open File"] -label [mc "Open File"]
-    .menubar.file entryconfigure [.menubar.file index "Save"] -label [mc "Save"]
-    .menubar.file entryconfigure [.menubar.file index "Save As"] -label [mc "Save As"]
-    .menubar.file entryconfigure [.menubar.file index "Exit"] -label [mc "Exit"]
+    .menubar.file entryconfigure $new_file_idx -label [mc "New File"]
+    .menubar.file entryconfigure $open_file_idx -label [mc "Open File"]
+    .menubar.file entryconfigure $save_idx -label [mc "Save"]
+    .menubar.file entryconfigure $save_as_idx -label [mc "Save As"]
+    .menubar.file entryconfigure $exit_idx -label [mc "Exit"]
+    
+    # 保存编辑菜单索引
+    set undo_idx [.menubar.edit index "Undo"]
+    set redo_idx [.menubar.edit index "Redo"]
+    set cut_idx [.menubar.edit index "Cut"]
+    set copy_idx [.menubar.edit index "Copy"]
+    set paste_idx [.menubar.edit index "Paste"]
     
     # 更新编辑菜单
-    .menubar.edit entryconfigure [.menubar.edit index "Undo"] -label [mc "Undo"]
-    .menubar.edit entryconfigure [.menubar.edit index "Redo"] -label [mc "Redo"]
-    .menubar.edit entryconfigure [.menubar.edit index "Cut"] -label [mc "Cut"]
-    .menubar.edit entryconfigure [.menubar.edit index "Copy"] -label [mc "Copy"]
-    .menubar.edit entryconfigure [.menubar.edit index "Paste"] -label [mc "Paste"]
+    .menubar.edit entryconfigure $undo_idx -label [mc "Undo"]
+    .menubar.edit entryconfigure $redo_idx -label [mc "Redo"]
+    .menubar.edit entryconfigure $cut_idx -label [mc "Cut"]
+    .menubar.edit entryconfigure $copy_idx -label [mc "Copy"]
+    .menubar.edit entryconfigure $paste_idx -label [mc "Paste"]
+    
+    # 保存视图菜单索引
+    set toggle_tree_idx [.menubar.view index "Toggle File Tree"]
+    set toggle_term_idx [.menubar.view index "Toggle Terminal"]
     
     # 更新视图菜单
-    .menubar.view entryconfigure [.menubar.view index "Toggle File Tree"] -label [mc "Toggle File Tree"]
-    .menubar.view entryconfigure [.menubar.view index "Toggle Terminal"] -label [mc "Toggle Terminal"]
+    .menubar.view entryconfigure $toggle_tree_idx -label [mc "Toggle File Tree"]
+    .menubar.view entryconfigure $toggle_term_idx -label [mc "Toggle Terminal"]
     
     # 更新标签页右键菜单
-    .tabmenu entryconfigure [.tabmenu index "Close"] -label [mc "Close"]
+    set close_idx [.tabmenu index "Close"]
+    .tabmenu entryconfigure $close_idx -label [mc "Close"]
     
     # 更新标签页标题
     foreach tab [.paned.right.notebook tabs] {
@@ -194,13 +232,15 @@ proc update_ui {} {
     }
     
     # 更新终端提示符
-    # 获取终端文本中最后一行
     set last_line [.paned.right.terminal.text get "end-1c linestart" "end-1c"]
     set prompt [mc "Terminal prompt"]
     if {[string match "$ *" $last_line] || [string match "$prompt*" $last_line]} {
         .paned.right.terminal.text delete "end-1c linestart" "end-1c"
         .paned.right.terminal.text insert "end-1c" $prompt
     }
+    
+    # 更新错误消息
+    set file_not_found_msg [mc "File or directory does not exist: %s"]
 }
 
 # 创建主面板
@@ -319,7 +359,7 @@ if {$argc > 0} {
             Editor::open_file [file normalize $target]
         }
     } else {
-        tk_messageBox -icon error -message "文件或目录不存在: $target"
+        tk_messageBox -icon error -message [format [mc "File or directory does not exist: %s"] $target]
         Editor::show_welcome
     }
 } else {

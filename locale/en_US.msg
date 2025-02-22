@@ -38,4 +38,7 @@ mcset en_US "Close" "Close"
 mcset en_US "Terminal prompt" "$ "
 
 # Welcome Page
-mcset en_US "Welcome Text" "Welcome to Pencium Editor!\n\nThis is a modern text editor based on TCL/Tk.\n\nShortcuts:\n• Ctrl+N  - New File\n• Ctrl+O  - Open File\n• Ctrl+S  - Save File\n• Ctrl+W  - Close Current Tab\n\nFeatures:\n• Multi-tab Editing\n• File Tree Browser\n• Integrated Terminal\n• Auto-save Prompt\n\nGetting Started:\n• Browse files using the file tree\n• Use shortcuts to create/open files\n• Toggle terminal for command-line operations\n\nProject URL: https://github.com/ytfh44/pencium-editor" 
+mcset en_US "Welcome Text" "Welcome to Pencium Editor!\n\nThis is a modern text editor based on TCL/Tk.\n\nShortcuts:\n• Ctrl+N  - New File\n• Ctrl+O  - Open File\n• Ctrl+S  - Save File\n• Ctrl+W  - Close Current Tab\n\nFeatures:\n• Multi-tab Editing\n• File Tree Browser\n• Integrated Terminal\n• Auto-save Prompt\n\nGetting Started:\n• Browse files using the file tree\n• Use shortcuts to create/open files\n• Toggle terminal for command-line operations\n\nProject URL: https://github.com/ytfh44/pencium-editor"
+
+# Error Messages
+mcset en_US "File or directory does not exist: %s" "File or directory does not exist: %s" 

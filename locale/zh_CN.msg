@@ -38,4 +38,7 @@ mcset zh_CN "Close" "关闭"
 mcset zh_CN "Terminal prompt" "$ "
 
 # 欢迎页面
-mcset zh_CN "Welcome Text" "欢迎使用 Pencium Editor！\n\n这是一个基于 TCL/Tk 开发的现代化文本编辑器。\n\n快捷键：\n• Ctrl+N  - 新建文件\n• Ctrl+O  - 打开文件\n• Ctrl+S  - 保存文件\n• Ctrl+W  - 关闭当前标签页\n\n功能：\n• 多标签页编辑\n• 文件树浏览\n• 集成终端\n• 自动保存提示\n\n开始使用：\n• 使用文件树浏览文件\n• 使用快捷键新建或打开文件\n• 切换终端显示开始命令行操作\n\n项目地址：https://github.com/ytfh44/pencium-editor" 
+mcset zh_CN "Welcome Text" "欢迎使用 Pencium Editor！\n\n这是一个基于 TCL/Tk 开发的现代化文本编辑器。\n\n快捷键：\n• Ctrl+N  - 新建文件\n• Ctrl+O  - 打开文件\n• Ctrl+S  - 保存文件\n• Ctrl+W  - 关闭当前标签页\n\n功能：\n• 多标签页编辑\n• 文件树浏览\n• 集成终端\n• 自动保存提示\n\n开始使用：\n• 使用文件树浏览文件\n• 使用快捷键新建或打开文件\n• 切换终端显示开始命令行操作\n\n项目地址：https://github.com/ytfh44/pencium-editor"
+
+# 错误消息
+mcset zh_CN "File or directory does not exist: %s" "文件或目录不存在: %s" 
