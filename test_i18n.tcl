@@ -35,12 +35,7 @@ puts "Message file exists: [file exists $zh_file]"
 if {[file exists $zh_file]} {
     puts "Message file size: [file size $zh_file]"
 } else {
-    puts "Trying old filename (zh_CN.msg)"
-    set zh_file [file join [file dirname [info script]] "locale" "zh_CN.msg"]
-    puts "Old file exists: [file exists $zh_file]"
-    if {[file exists $zh_file]} {
-        puts "Old file size: [file size $zh_file]"
-    }
+    puts "错误：找不到消息文件 zh_cn.msg"
 }
 
 # 直接加载语言文件
