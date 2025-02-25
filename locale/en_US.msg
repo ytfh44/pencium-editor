@@ -24,10 +24,15 @@ mcset en_US "Toggle Terminal" "Toggle Terminal"
 
 # Dialogs
 mcset en_US "Unsaved Changes" "Unsaved Changes"
-mcset en_US "There are unsaved changes.\n\nYes: Save all changes\nNo: Discard changes\nCancel: Don't close" "There are unsaved changes.\n\nYes: Save all changes\nNo: Discard changes\nCancel: Don't close"
+mcset en_US "There are unsaved changes" "There are unsaved changes"
+mcset en_US "Save all changes" "Save all changes"
+mcset en_US "Discard changes" "Discard changes"
+mcset en_US "Don't close" "Don't close"
 mcset en_US "Cannot open file" "Cannot open file"
 mcset en_US "Save failed" "Save failed"
-mcset en_US "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close" "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close"
+mcset en_US "File %s has unsaved changes" "File %s has unsaved changes"
+mcset en_US "Save changes" "Save changes"
+mcset en_US "Don't save" "Don't save"
 
 # Tabs
 mcset en_US "Welcome" "Welcome"
@@ -38,7 +43,36 @@ mcset en_US "Close" "Close"
 mcset en_US "Terminal prompt" "$ "
 
 # Welcome Page
-mcset en_US "Welcome Text" "Welcome to Pencium Editor!\n\nThis is a modern text editor based on TCL/Tk.\n\nShortcuts:\n• Ctrl+N  - New File\n• Ctrl+O  - Open File\n• Ctrl+S  - Save File\n• Ctrl+W  - Close Current Tab\n\nFeatures:\n• Multi-tab Editing\n• File Tree Browser\n• Integrated Terminal\n• Auto-save Prompt\n\nGetting Started:\n• Browse files using the file tree\n• Use shortcuts to create/open files\n• Toggle terminal for command-line operations\n\nProject URL: https://github.com/ytfh44/pencium-editor"
+mcset en_US "Welcome Text" {Welcome to Pencium Editor!
+
+This is a modern text editor based on TCL/Tk.
+
+Shortcuts:
+• Ctrl+N  - New File
+• Ctrl+O  - Open File
+• Ctrl+S  - Save File
+• Ctrl+W  - Close Current Tab
+
+Features:
+• Multi-tab Editing
+• File Tree Browser
+• Integrated Terminal
+• Auto-save Prompt
+
+Getting Started:
+• Browse files using the file tree
+• Use shortcuts to create/open files
+• Toggle terminal for command-line operations
+
+Project URL: https://github.com/ytfh44/pencium-editor}
 
 # Error Messages
-mcset en_US "File or directory does not exist: %s" "File or directory does not exist: %s" 
+mcset en_US "File or directory does not exist: %s" "File or directory does not exist: %s"
+
+# Title Bar
+mcset en_US "Pencium Editor" "Pencium Editor"
+
+# Dialog Buttons
+mcset en_US "Yes" "Yes"
+mcset en_US "No" "No"
+mcset en_US "Cancel" "Cancel"

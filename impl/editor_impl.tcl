@@ -11,9 +11,10 @@ namespace eval Editor {
         variable tabs_info
         
         set f [frame .paned.right.notebook.f$current_tab]
-        text $f.text -wrap none -undo 1 -font {Monospace 10} \
+        text $f.text -wrap word -undo 1 -font {Monospace 10} \
             -yscrollcommand "$f.scrolly set" \
-            -xscrollcommand "$f.scrollx set"
+            -xscrollcommand "$f.scrollx set" \
+            -padx 10 -pady 10
         scrollbar $f.scrolly -orient vertical -command "$f.text yview"
         scrollbar $f.scrollx -orient horizontal -command "$f.text xview"
         
@@ -84,9 +85,9 @@ namespace eval Editor {
             
             if {[is_modified $tab_id]} {
                 set title [mc "Unsaved Changes"]
-                set message [format [mc "File %s has unsaved changes.\n\nYes: Save changes\nNo: Discard changes\nCancel: Don't close"] \
-                    [expr {$filename eq "" ? "[mc Untitled]-$tab_id" : [file tail $filename]}]]
-                set answer [tk_messageBox -icon question -message $message -title $title -type yesnocancel]
+                set file_name [expr {$filename eq "" ? "[mc Untitled]-$tab_id" : [file tail $filename]}]
+                set message "[format [mc "File %s has unsaved changes"] $file_name]\n\n[mc Yes]: [mc {Save changes}]\n[mc No]: [mc {Don't save}]\n[mc Cancel]: [mc {Don't close}]"
+                set answer [tk_messageBox -icon question -message $message -title $title -type yesnocancel -default yes]
                 
                 switch -- $answer {
                     yes {
